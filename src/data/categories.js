@@ -1,0 +1,17 @@
+export const categories = [
+    "All",
+    "JavaScript",
+    "TypeScript",
+    "Programming",
+    "Lifting",
+    "Bowling",
+    "Hiking",
+    "React",
+    "Next.js",
+    "Functional",
+    "Songs",
+    "Movies",
+    "Serial",
+    "OOPs",
+    "Coding",
+  ]

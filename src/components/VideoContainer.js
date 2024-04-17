@@ -22,6 +22,7 @@ const VideoContainer = () => {
           <VideoCard key={video.id} info={video} />
         </Link>
       ))}
+  
     </div>
   );
 };

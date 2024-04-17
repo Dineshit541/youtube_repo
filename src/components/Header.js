@@ -1,15 +1,26 @@
 import { Bell, Search, Upload, User } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toogleMenu } from "../utils/appSlice";
 import { useEffect, useState } from "react";
 import { YOUTUBE_SERAHC_API } from "../utils/constant";
+import { cacheResults } from "../utils/searchSlice";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [suggestion, setSuggestion] = useState([]);
+  const [showSuggestion, setShowSuggestion] = useState(false);
   const dispatch = useDispatch();
 
+  const searchCache = useSelector((state) => state.search);
+
   useEffect(() => {
-    const timer = setTimeout(() => getSearchSuggestion(), 200);
+    const timer = setTimeout(() => {
+      if (searchCache[searchQuery]) {
+        setSuggestion(searchCache[searchQuery]);
+      } else {
+        getSearchSuggestion();
+      }
+    }, 200);
 
     return () => {
       clearInterval(timer);
@@ -19,6 +30,11 @@ const Header = () => {
   const getSearchSuggestion = async () => {
     const data = await fetch(YOUTUBE_SERAHC_API + searchQuery);
     const json = await data.json();
+    console.log("API Call " + searchQuery);
+    setSuggestion(json[1]);
+    dispatch(cacheResults({
+      [searchQuery]:json[1]
+    }));
   };
 
   const handletooglemenu = () => {
@@ -40,28 +56,36 @@ const Header = () => {
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/1024px-YouTube_Logo_2017.svg.png"
           />
         </div>
-      
+
         <div>
-      <div className=" flex flex-grow w-[574px] col-span-3">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="rounded-l-full border border-secondary-border shadow-inner shadow-secondary py-1 px-4 text-lg w-full focus:border-blue-500 outline-none"
-          />
-          <button className="py-2 px-4 rounded-r-full border-secondary-border border border-l-0 flex-shrink-0">
-            <Search />
-          </button>
+          <div className=" flex flex-grow w-[574px] col-span-3">
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQuery}
+              className="rounded-l-full border border-secondary-border shadow-inner shadow-secondary py-1 px-4 text-lg w-full focus:border-blue-500 outline-none"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setShowSuggestion(true)}
+              onBlur={() => setShowSuggestion(false)}
+            />
+            <button className="py-2 px-4 rounded-r-full border-secondary-border border border-l-0 flex-shrink-0">
+              <Search />
+            </button>
           </div>
-          <div className="fixed bg-white py-2 px-5 w-[32rem] rounded-lg shadow-lg">
-            <ul>
-              <li>< Search/>Iphone</li>
-              <li><Search/>Iphone 14</li>
-              <li><Search/> Iphone 13</li>
-              <li><Search /> Iphone 12</li>
-            </ul>
-          </div>
+          {showSuggestion && (
+            <div className="fixed absolute bg-white py-2 px-5 w-[32rem] rounded-lg">
+              <ul>
+                {suggestion.map((sug, ind) => (
+                  <li
+                    key={ind}
+                    className="flex-shrink-20 flex  py-2 shadow-sm hover:bg-gray-100"
+                  >
+                    <Search /> {sug}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className={"flex-shrink-0 md:gap-5 flex col-span-1"}>

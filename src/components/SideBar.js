@@ -1,36 +1,65 @@
+import React, { useState } from "react";
 
-import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { SideBarItems } from "../data/categories";
 
 const SideBar = () => {
-
-  const isMenuOpen = useSelector(store => store.app.isMenuOpen)
-
-  if(!isMenuOpen) return null;
+  const [active, setActive] = useState("Home");
 
   return (
-    <div className=" p-5 shadow-lg w-48">
-      <ul>
-         <li><Link to="/"> Home</Link></li>
-        <li> Shorts</li>
-        <li> Videos</li>
-        <li> Live</li>
-      </ul>
-      <h1 className=" font-bold pt-5">Subscriptions</h1>
-      <ul>
-        <li> Music</li>
-        <li> Sports</li>
-        <li> Gaming</li>
-        <li> Movies</li>
-      </ul>
-      <h1 className=" font-bold pt-5">Watch Later</h1>
-      <ul>
-        <li> Music</li>
-        <li> Sports</li>
-        <li> Gaming</li>
-        <li> Movies</li>
-      </ul>
+    <div className="yt-scrollbar no-scrollbar shadow-lg w-[15rem] bg-yt-black h-[calc(100vh-53px)] mt-14 fixed top-0 left-0 text-yt-white p-3 overflow-scroll">
+      <div className="mb-4">
+        {SideBarItems.Top.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className={`h-10 flex justify-start px-3 rounded-xl items-center cursor-pointer hover:bg-yt-light-black my-1 ${
+                item.name === active ? "bg-yt-light-black" : "bg-yt-black"
+              }`}
+              onClick={() => setActive(item.name)}
+            >
+              <span className="mr-5">{item.icon}</span>
+              <p className="p-2 text-sm font-medium">{item.name}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      <hr className="text-yt-light-black my-2" />
+      <div className="mb-4">
+        {SideBarItems.Middle.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className={`h-10 flex justify-start px-3 rounded-xl items-center cursor-pointer hover:bg-yt-light-black my-1 ${
+                item.name === active ? "bg-yt-light-black" : "bg-yt-black"
+              }`}
+              onClick={() => setActive(item.name)}
+            >
+              <span className="mr-5">{item.icon}</span>
+              <p className="p-2 text-sm font-medium">{item.name}</p>
+            </div>
+          );
+        })}
+      </div>
+      <hr className="text-yt-light-black my-2" />
+      <h2 className="pt-1 px-3">Explore</h2>
+      <div className="mb-4">
+        {SideBarItems.Explore.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className={`h-10 flex justify-start px-3 rounded-xl items-center cursor-pointer hover:bg-yt-light-black my-1 ${
+                item.name === active ? "bg-yt-light-black" : "bg-yt-black"
+              }`}
+              onClick={() => setActive(item.name)}
+            >
+              <span className="mr-5">{item.icon}</span>
+              <p className="p-2 text-sm font-medium">{item.name}</p>
+            </div>
+          );
+        })}
+      </div>
+      <hr className="text-yt-light-black my-2" />
     </div>
   );
 };

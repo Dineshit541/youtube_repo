@@ -1,13 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import appReducer from "./appSlice"
 import searchReducer from "./searchSlice";
+import appReducer from "./appSlice";
 
-
-const appStore =configureStore({
+const store =configureStore({
        reducer:{
-          app:appReducer,
-          search:searchReducer
+          search:searchReducer,
+          app:appReducer
        }
 });
 
-export default appStore;
+export default store;
